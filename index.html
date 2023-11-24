@@ -39,8 +39,8 @@
             const year = new Date().getFullYear();
             const tipoArbitrio = 1;
             const token = 'zzTOlrA7_GXJGzys8I9Tq9OCEcuz1yR7BXbXtgb7GM8HZIpikLY9jGfeA32ixm7ZGc89HNrXBWaU0KWKFvq-vfW6QZ-0qVaQgyuxhkUFwENyrh_FJeJ5magwHDiQgFsq1izAOs4K3S8Z5G6jSvGH1VfVprEqMJlZ14XMsexGPa1LZUJktkH28amotdFcJZvH';
-            const urlLotes = `https://ws.mineco.gob.pe/serverdf/rest/services/NSRTM_CATASTRO_FISCAL/NSRTM_CARTO_FISCAL/MapServer/5?token=${token}`;
-            const urlCategorias = `https://ws.mineco.gob.pe/serverdf/rest/services/NSRTM_CATASTRO_FISCAL/NSRTM_CARTO_SERVICIOS/MapServer/2?token=${token}`;
+            const urlLotes = `https://ws.mineco.gob.pe/serverdf/rest/services/NSRTM_CATASTRO_FISCAL/NSRTM_CARTO_FISCAL/MapServer/5`;
+            const urlCategorias = `https://ws.mineco.gob.pe/serverdf/rest/services/NSRTM_CATASTRO_FISCAL/NSRTM_CARTO_SERVICIOS/MapServer/2`;
             const campoDeCategoriasEnLotes = "$feature.VALOR_ARB_ARBITRIO_ID";
             const queryUbigeo = `UBIGEO = '${ubigeo}'`;
             const queryCategorias = `UBIGEO = '${ubigeo}' AND ANIO = ${year} AND TIP_VAR_ARBITRIO_ID = ${tipoArbitrio}`;
@@ -60,6 +60,7 @@
             const queryTable = query.executeQueryJSON(urlCategorias, {
                 where: queryCategorias,
                 outFields: ['VALOR_CODIGO', 'ABREVIATURA', 'ESTILO'],
+                token: token
             })
                 .then((response) => {
                     const uniqueValueInfos = response.features.map(i => {
@@ -87,6 +88,7 @@
                 .then((uvr) => {
                     const featureLayer = new FeatureLayer({
                         url: urlLotes,
+                        token: token,
                         renderer: uvr,
                         definitionExpression: queryUbigeo,
                     });
